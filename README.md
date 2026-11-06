@@ -62,4 +62,3 @@ The reports describe local/synthetic checks for burst scheduling, provider failu
 | p95 | 511.0 ms | 341.0 ms |
 | Maximum | 539.2 ms | 370.6 ms |
 
-The figures come from the project’s reported synthetic transport tests, rather than live-chain execution measurements.
