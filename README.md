@@ -22,6 +22,28 @@ flowchart TD
     H --> I[State updates and notifications]
 ```
 
+## Inspect and run the public code
+
+The repository now includes a standalone extraction of the asynchronous RPC transport and trigger scheduler. The RPC module demonstrates three separate `aiohttp` connection pools (submission, receipt, and endpoint probing), local provider fallback, bounded in-flight operations, and live latency measurements used to compare candidate lane widths. The scheduler offers an absolute-time trigger and a retrying asynchronous condition trigger.
+
+These files are a **smaller standalone extraction** of the engineering patterns in the finalized mintbot, not a copy of its complete production execution system.
+
+```bash
+git clone https://github.com/NFTPSYCHO5524/multi-wallet-nft-minting-engine.git
+cd multi-wallet-nft-minting-engine
+python -m pip install -r requirements.txt
+python -m pytest -q tests
+```
+
+The tests start local mock JSON-RPC servers on ephemeral localhost ports; they do not submit real blockchain transactions. [GitHub Actions](.github/workflows/python-tests.yml) runs them on Python 3.11 and 3.12.
+
+| Public file | What to inspect |
+| --- | --- |
+| [`mint_engine/rpc.py`](mint_engine/rpc.py) | JSON-RPC request handling, endpoint probing, connector isolation, bounded submissions and receipt reads |
+| [`mint_engine/trigger.py`](mint_engine/trigger.py) | Absolute-time and asynchronous condition triggers |
+| [`tests/test_rpc.py`](tests/test_rpc.py) | Local mock-server tests for fallback, connector isolation, live probes and receipt behavior |
+| [`tests/test_trigger.py`](tests/test_trigger.py) | Scheduler behavior after transient failures |
+
 ## Major components
 
 | Component | Responsibility |
